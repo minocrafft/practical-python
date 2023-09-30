@@ -2,32 +2,29 @@
 #
 # Exercise 1.27
 import sys
-import csv
+from report import read_portfolio
 
 
 def portfolio_cost(filename):
-    cost = 0
+    """
+    Computes the total cost (shares*price) of a portfolio file
+    """
+    portfolio = read_portfolio(filename)
 
-    with open(filename, "r") as f:
-        data = csv.reader(f)
-        next(data)
-
-        for row in data:
-            try:
-                _, share, price = row
-                cost += int(share) * float(price)
-            except ValueError:
-                print(f"Warning: There is empty columns in {row}")
-                continue
-
+    cost = sum([stock["shares"] * stock["price"] for stock in portfolio])
     return cost
 
 
-print("args: ", sys.argv)
+def main(argv):
+    if len(argv) != 2:
+        raise SystemExit(f"Usage: {argv[0]} portfoliofile")
 
-filename = "Data/portfolio.csv"
-if len(sys.argv) == 2 and sys.argv[1].endswith("csv"):
-    filename = sys.argv[1]
+    _, _portfolio = argv
+    cost = portfolio_cost(_portfolio)
+    print(f"Total cost: {cost}")
 
-cost = portfolio_cost(filename)
-print(f"Total cost: {cost}")
+
+if __name__ == "__main__":
+    import sys
+
+    main(sys.argv)
