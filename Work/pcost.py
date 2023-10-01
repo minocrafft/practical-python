@@ -5,14 +5,12 @@ import sys
 from report import read_portfolio
 
 
-def portfolio_cost(filename):
+def portfolio_cost(filename: str) -> float:
     """
     Computes the total cost (shares*price) of a portfolio file
     """
     portfolio = read_portfolio(filename)
-
-    cost = sum([stock["shares"] * stock["price"] for stock in portfolio])
-    return cost
+    return sum([s.cost() for s in portfolio])
 
 
 def main(argv):

@@ -6,7 +6,7 @@ from typing import Optional, Callable
 
 
 def parse_csv(
-    lines,
+    lines: str | list,
     select: Optional[list[str]] = None,
     types: Optional[list[Callable]] = None,
     has_headers: bool = True,
@@ -20,7 +20,10 @@ def parse_csv(
     if select and not has_headers:
         raise RuntimeError("select requires column headers")
 
-    rows = csv.reader(lines, delimiter=delimiter)
+    if isinstance(lines, str):
+        rows = csv.reader(open(lines), delimiter=delimiter)
+    else:
+        rows = lines
 
     # Read the file headers if any
     headers = next(rows) if has_headers else []
