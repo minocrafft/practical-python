@@ -10,7 +10,7 @@ def portfolio_cost(filename: str) -> float:
     Computes the total cost (shares*price) of a portfolio file
     """
     portfolio = read_portfolio(filename)
-    return sum([s.cost() for s in portfolio])
+    return sum([s.cost for s in portfolio])
 
 
 def main(argv):
