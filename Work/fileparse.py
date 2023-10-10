@@ -6,12 +6,12 @@ from typing import Optional, Callable
 
 
 def parse_csv(
-    lines: str | list,
+    lines,
     select: Optional[list[str]] = None,
     types: Optional[list[Callable]] = None,
     has_headers: bool = True,
     delimiter=",",
-    silence_errors: bool = True,
+    silence_errors: bool = False,
 ):
     """
     Parse a CSV file into a list of records
@@ -20,10 +20,7 @@ def parse_csv(
     if select and not has_headers:
         raise RuntimeError("select requires column headers")
 
-    if isinstance(lines, str):
-        rows = csv.reader(open(lines), delimiter=delimiter)
-    else:
-        rows = lines
+    rows = csv.reader(lines, delimiter=delimiter)
 
     # Read the file headers if any
     headers = next(rows) if has_headers else []
@@ -39,7 +36,7 @@ def parse_csv(
         if not row:
             continue
 
-        if indices:
+        if select:
             row = [row[index] for index in indices]
 
         if types:

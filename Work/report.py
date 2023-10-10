@@ -4,30 +4,33 @@
 from formatter import create_formatter
 from fileparse import parse_csv
 from stock import Stock
+from portfolio import Portfolio
 
 
-def read_portfolio(filename: str) -> list[Stock]:
+def read_portfolio(filename: str):
     """
     Read a stock portfolio file into a list of dictionaries with keys
     name, shares, and price.
     """
-    portfolio = parse_csv(
-        filename,
-        select=["name", "shares", "price"],
-        types=[str, int, float],
-    )
+    with open(filename) as file:
+        portfolio = parse_csv(
+            file,
+            select=["name", "shares", "price"],
+            types=[str, int, float],
+        )
 
-    return [Stock(d["name"], d["shares"], d["price"]) for d in portfolio]
+    return Portfolio([Stock(d["name"], d["shares"], d["price"]) for d in portfolio])
 
 
 def read_prices(filename: str) -> dict:
     """
     Read a CSV file of price data into a dict mapping names to prices.
     """
-    return dict(parse_csv(filename, types=[str, float], has_headers=False))
+    with open(filename) as lines:
+        return dict(parse_csv(lines, types=[str, float], has_headers=False))
 
 
-def make_report(portfolio: list[Stock], prices: dict) -> list[tuple]:
+def make_report(portfolio, prices: dict) -> list[tuple]:
     """
     Make a list of (name, shares, price, change) tuples given a portfolio list
     and prices dictionary.
