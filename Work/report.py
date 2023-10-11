@@ -7,27 +7,21 @@ from stock import Stock
 from portfolio import Portfolio
 
 
-def read_portfolio(filename: str):
+def read_portfolio(filename: str, **kwargs):
     """
     Read a stock portfolio file into a list of dictionaries with keys
     name, shares, and price.
     """
-    with open(filename) as file:
-        portfolio = parse_csv(
-            file,
-            select=["name", "shares", "price"],
-            types=[str, int, float],
-        )
-
-    return Portfolio([Stock(d["name"], d["shares"], d["price"]) for d in portfolio])
+    with open(filename) as lines:
+        return Portfolio.from_csv(lines, **kwargs)
 
 
-def read_prices(filename: str) -> dict:
+def read_prices(filename: str, **kwargs) -> dict:
     """
     Read a CSV file of price data into a dict mapping names to prices.
     """
     with open(filename) as lines:
-        return dict(parse_csv(lines, types=[str, float], has_headers=False))
+        return dict(parse_csv(lines, types=[str, float], has_headers=False, **kwargs))
 
 
 def make_report(portfolio, prices: dict) -> list[tuple]:
