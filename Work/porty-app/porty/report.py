@@ -1,10 +1,14 @@
 # report.py
 #
 # Exercise 2.4
-from formatter import create_formatter
-from fileparse import parse_csv
-from stock import Stock
-from portfolio import Portfolio
+import logging
+from .formatter import create_formatter
+from .fileparse import parse_csv
+from .stock import Stock
+from .portfolio import Portfolio
+
+
+logging.basicConfig(filename="app.log", filemode="w", level=logging.DEBUG)
 
 
 def read_portfolio(filename: str, **kwargs):

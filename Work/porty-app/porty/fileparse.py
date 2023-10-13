@@ -2,7 +2,10 @@
 #
 # Exercise 3.3
 import csv
+import logging
 from typing import Optional, Callable
+
+logger = logging.getLogger(__name__)
 
 
 def parse_csv(
@@ -44,8 +47,8 @@ def parse_csv(
                 row = [func(val) for func, val in zip(types, row)]
             except ValueError as e:
                 if not silence_errors:
-                    print(f"Row {i}: Couldn't convert {row}")
-                    print(f"Row {i}: Reason: {e}")
+                    logger.warning(f"Row {i}: Couldn't convert {row}")
+                    logger.debug(f"Row {i}: Reason: {e}")
                 continue
 
         # Make a dictionary or a tuple
